@@ -397,14 +397,43 @@ public class Signup extends javax.swing.JFrame {
         checkEmailStmt.setString(1, email);
         emailResult = checkEmailStmt.executeQuery();
 
-        // Check for existing phone number
-        checkPhoneStmt = connection.prepareStatement("SELECT COUNT(*) FROM employee WHERE phone = ?");
-        checkPhoneStmt.setString(1, phone);
-        phoneResult = checkPhoneStmt.executeQuery();
+    // Check for existing phone number
+    checkPhoneStmt = connection.prepareStatement("SELECT COUNT(*) FROM employee WHERE phone = ?");
+    checkPhoneStmt.setString(1, phone);
+    phoneResult = checkPhoneStmt.executeQuery();
 
-        
-        // Check for existing username
-        PreparedStatement checkUsernameStmt = connection.prepareStatement("SELECT COUNT(*) FROM employee WHERE username = ?");
+
+// Check EMAIL 
+    emailResult.next();
+    int emailCount = emailResult.getInt(1);
+
+    if(emailCount > 0){
+    JOptionPane.showMessageDialog(this,
+        "Email already exists!",
+        "Error",
+        JOptionPane.ERROR_MESSAGE);
+    return;
+    }
+
+
+// Check PHONE 
+    phoneResult.next();
+    int phoneCount = phoneResult.getInt(1);
+
+    if(phoneCount > 0){
+    JOptionPane.showMessageDialog(this,
+        "Phone number already exists!",
+        "Error",
+        JOptionPane.ERROR_MESSAGE);
+    return;
+    }
+
+
+    // Check USERNAME 
+    PreparedStatement checkUsernameStmt =
+    connection.prepareStatement(
+    "SELECT COUNT(*) FROM employee WHERE username = ?");
+
         checkUsernameStmt.setString(1, username);
         ResultSet usernameResult = checkUsernameStmt.executeQuery();
         usernameResult.next();
